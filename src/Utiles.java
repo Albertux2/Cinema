@@ -1,6 +1,7 @@
 import java.util.Random;
 
 public class Utiles {
+
    public static char generateRandomChar(char lastLetter){
         Random generator = new Random();
         int firstLetter = (int)'a';
@@ -12,6 +13,10 @@ public class Utiles {
     public static int generateRandomInt(int cap){
        Random generator = new Random();
        return generator.nextInt(cap);
+    }
+
+    public static Location generateRandomLocation(){
+       return new Location(generateRandomChar('a'),generateRandomInt(2));
     }
 
 }
