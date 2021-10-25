@@ -1,17 +1,17 @@
 public class Request {
-    Seat requestedSeat;
+    Location requestedSeat;
     boolean accepted;
 
-    public Request(Seat requested, boolean accepted) {
+    public Request(Location requested, boolean accepted) {
         this.requestedSeat = requested;
         this.accepted = accepted;
     }
 
-    public void showRequest(){
-        System.out.println("Requested seat at "+ requestedSeat.getColumn()+" : "+ requestedSeat.getRow()+", accepted? "+accepted);
+    public String showRequest(){
+        return "Requested seat at "+ requestedSeat.getColumn()+" : "+ requestedSeat.getRow()+", accepted? "+accepted;
     }
 
-    public Seat getRequestedSeat() {
+    public Location getRequestedSeat() {
         return requestedSeat;
     }
 

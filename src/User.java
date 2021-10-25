@@ -1,33 +1,38 @@
 import java.util.ArrayList;
 
-public class User extends Thread{
+public class User implements Runnable{
     Seat occupiedSeat;
     ArrayList<Request> requests;
-    Cinema cinema = Cinema.getInstance();
+    Pit pit;
 
 
-    public User() {
+    public User(Pit pit) {
+        this.pit = pit;
         this.requests = new ArrayList<Request>();
     }
 
     @Override
     public void run() {
-        cinema.fillPit(1,2);
-        Pit cinemaPit = cinema.getPit();
-        super.run();
-        while (!cinemaPit.isPitFull() && occupiedSeat == null){
-            Seat seatRequested = new Seat(Utiles.generateRandomLocation());
-            requests.add(new Request(seatRequested,takeSeat(seatRequested)));
+        while (!pit.isPitFull() && occupiedSeat == null){
+            Location locationRequested = Utiles.generateRandomLocation();
+            Seat seatRequested = pit.getSeat(locationRequested);
+            requests.add(new Request(locationRequested,takeSeat(seatRequested)));
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-        requests.stream().forEach(Request::showRequest);
+        requests.stream().forEach((r)->System.out.println(Thread.currentThread().getName() + r.showRequest()));
     }
 
     private boolean takeSeat(Seat seat){
         if (seat.isOccupied())
             return false;
         else
-            seat.setOccupied(true);
+        seat.setOccupied(true);
             this.occupiedSeat = seat;
+            notifyAll();
             return true;
     }
 }
