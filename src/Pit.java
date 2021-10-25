@@ -4,7 +4,7 @@ public class Pit {
     HashMap<Location,Seat> seats = new HashMap<>();
 
     public Pit() {
-        fillPit(2,5);
+        fillPit(10,30);
     }
 
     public HashMap<Location, Seat> getSeats() {

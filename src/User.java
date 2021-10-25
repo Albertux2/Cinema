@@ -14,25 +14,33 @@ public class User implements Runnable{
     @Override
     public void run() {
         while (!pit.isPitFull() && occupiedSeat == null){
-            Location locationRequested = Utiles.generateRandomLocation();
+            Location locationRequested = generateTillNewLocation('j',30);
             Seat seatRequested = pit.getSeat(locationRequested);
-            requests.add(new Request(locationRequested,takeSeat(seatRequested)));
+            boolean isFree = seatRequested.takeSeat();
+            requests.add(new Request(locationRequested,isFree));
+            if (isFree){
+                this.occupiedSeat = seatRequested;
+            }
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
         requests.stream().forEach((r)->System.out.println(Thread.currentThread().getName() + r.showRequest()));
     }
 
-    private boolean takeSeat(Seat seat){
-        if (seat.isOccupied())
-            return false;
-        else
-        seat.setOccupied(true);
-            this.occupiedSeat = seat;
-            notifyAll();
-            return true;
+    private Location generateTillNewLocation(char lastLetter, int cap){
+        boolean newLocation = true;
+        Location locationRequested = null;
+        do{
+            locationRequested = Utiles.generateRandomLocation(lastLetter,cap);
+            Location finalLocationRequested = locationRequested;
+            newLocation = requests.stream().anyMatch((r)->{return r.getRequestedLocation().equals(finalLocationRequested);});
+        }while(newLocation);
+        return locationRequested;
+    }
+
+    public Seat getOccupiedSeat() {
+        return occupiedSeat;
     }
 }

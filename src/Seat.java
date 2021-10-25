@@ -9,8 +9,16 @@ public class Seat {
         return occupied;
     }
 
-    public synchronized void setOccupied(boolean occupied) {
+    public void setOccupied(boolean occupied) {
         this.occupied = occupied;
-        notifyAll();
+    }
+
+    public synchronized boolean takeSeat() {
+        if (isOccupied()) {
+            return false;
+        } else {
+            setOccupied(true);
+            return true;
+        }
     }
 }

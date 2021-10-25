@@ -30,15 +30,15 @@ public class Location {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getRow(), getColumn());
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Location location = (Location) o;
+        return row == location.row && column == location.column;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Location)) return false;
-        Location location = (Location) o;
-        return getRow() == location.getRow() && getColumn() == location.getColumn();
+    public int hashCode() {
+        return Objects.hash(row, column);
     }
 }

@@ -15,8 +15,8 @@ public class Utiles {
        return generator.nextInt(cap);
     }
 
-    public static Location generateRandomLocation(){
-       return new Location(generateRandomChar('a'),generateRandomInt(2));
+    public static Location generateRandomLocation(char lastLetter, int cap){
+       return new Location(generateRandomChar(lastLetter),generateRandomInt(cap));
     }
 
 }
