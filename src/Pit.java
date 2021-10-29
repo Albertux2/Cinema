@@ -34,6 +34,22 @@ public class Pit {
             }
         }
     }
+    public synchronized boolean requestSeat(Location location) {
+        if (isOccupied(location)) {
+            return false;
+        } else {
+            setOccupied(location,true);
+            return true;
+        }
+    }
+
+    private boolean isOccupied(Location location){
+        return this.seats.get(location).isOccupied();
+    }
+
+    private void setOccupied(Location location,boolean condition){
+        this.seats.get(location).setOccupied(condition);
+    }
 
 
 }

@@ -13,12 +13,5 @@ public class Seat {
         this.occupied = occupied;
     }
 
-    public synchronized boolean takeSeat() {
-        if (isOccupied()) {
-            return false;
-        } else {
-            setOccupied(true);
-            return true;
-        }
-    }
+
 }

@@ -7,15 +7,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TicketSellerTest {
     @Test
-    void test(){
-            TicketSeller ti = new TicketSeller(new Pit());
-            ti.startSelling();
-            ArrayList<Seat> takedSeats = new ArrayList<>();
-            ti.getClients().stream().forEach((e) -> {
-                if (e.getOccupiedSeat() != null)
-                   takedSeats.add(e.getOccupiedSeat());
-            });
-            ArrayList<Seat> distinctSeats = (ArrayList) takedSeats.stream().distinct().collect(Collectors.toList());
-            assertTrue(takedSeats.equals(distinctSeats));
+    void test() {
+        TicketSeller ti = new TicketSeller(new Pit());
+        ti.startSelling();
+        ArrayList<Seat> takedSeats = new ArrayList<>();
+        ti.getClients().stream().forEach((e) -> {
+            if (e.getMySeat() != null)
+                takedSeats.add(e.getMySeat());
+        });
+        ArrayList<Seat> distinctSeats = (ArrayList) takedSeats.stream().distinct().collect(Collectors.toList());
+        assertTrue(takedSeats.equals(distinctSeats));
     }
 }

@@ -1,9 +1,11 @@
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.concurrent.Callable;
 
-public class User implements Runnable{
-    Seat occupiedSeat;
-    ArrayList<Request> requests;
-    Pit pit;
+public class User implements Callable<UserResponse> {
+    private Seat occupiedSeat;
+    private ArrayList<Request> requests;
+    private Pit pit;
 
 
     public User(Pit pit) {
@@ -12,21 +14,23 @@ public class User implements Runnable{
     }
 
     @Override
-    public void run() {
-        while (!pit.isPitFull() && occupiedSeat == null){
+    public UserResponse call() {
+        Optional<Seat> optionalSeat = Optional.ofNullable(occupiedSeat);
+        while (!pit.isPitFull() && !optionalSeat.isPresent()){
             Location locationRequested = generateTillNewLocation('j',30);
-            Seat seatRequested = pit.getSeat(locationRequested);
-            boolean isFree = seatRequested.takeSeat();
+            boolean isFree = pit.requestSeat(locationRequested);
             requests.add(new Request(locationRequested,isFree));
             if (isFree){
-                this.occupiedSeat = seatRequested;
+                this.occupiedSeat = pit.getSeat(locationRequested);
             }
+            optionalSeat = Optional.ofNullable(occupiedSeat);
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
             }
         }
         requests.stream().forEach((r)->System.out.println(Thread.currentThread().getName() + r.showRequest()));
+        return new UserResponse(this.requests,this,optionalSeat.orElse(null));
     }
 
     private Location generateTillNewLocation(char lastLetter, int cap){
